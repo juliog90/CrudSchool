@@ -10,10 +10,6 @@ import java.util.ArrayList;
 
 public class Alumno {
     private Integer id;
-
-    public Alumno() {
-    }
-
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -111,7 +107,6 @@ public class Alumno {
             }
 
         }
-
         return false;
     }
 
@@ -146,18 +141,14 @@ public class Alumno {
                 String sql = "call todosAlumnos(?)";
                 PreparedStatement comando = conexion.prepareStatement(sql);
                 ResultSet tabla = comando.executeQuery();
-                while(tabla.next()) {
-                    Alumno tempAlumno = new Alumno();
-                    tempAlumno.id = tabla.getInt("id");
-                    tempAlumno.nombre = tabla.getString("nombre");
-                    tempAlumno.apellidoPaterno= tabla.getString("apellido_paterno");
-                    tempAlumno.apellidoMaterno = tabla.getString("apellido_materno");
-                    tempAlumno.nombre = tabla.getString("nombre");
-                    // falta sp
+                // falta sp
 //                Carrera cursoCarrera  = new Carrera();
 //                Curso grupoCurso = new Curso();
 //                Grupo alumnoGrupo = new Grupo();
-                    tempAlumno.grupo = null;
+                Grupo grupo = null;
+                while(tabla.next()) {
+                    Alumno tempAlumno = new Alumno(tabla.getInt("id"), tabla.getString("nombre"),
+                            tabla.getString("apellido_paterno"), tabla.getString("apellido_materno"), grupo);
                     alumnos.add(tempAlumno);
                 }
                 conexion.close();
@@ -167,8 +158,6 @@ public class Alumno {
         } else {
             System.out.println("Problema en Base de Datos");
         }
-
         return alumnos;
-
     }
 }
