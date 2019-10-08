@@ -79,50 +79,51 @@ create table `GruposCursos` (
     primary key(`id`)
 );
 
-INSERT INTO `Carreras` (`id`, `nombre`) VALUES
-(1, 'TICS'),
-(3, 'Contabilidad'),
-(4, 'Mecatronica');
+INSERT INTO `Carreras` (`nombre`) VALUES
+('TICS'),
+('Contabilidad'),
+('Mecatronica');
 
-INSERT INTO `Cursos` (`id`, `nombre`, `carrera_id`) VALUES
-(1, 'Cuatrimestre 1', 1),
-(2, 'Cuatrimestre 2', 1),
-(6, 'Cuatrimestre 1', 3),
-(7, 'Cuatrimestre 2', 3),
-(11, 'Cuatrimestre 1', 4),
-(12, 'Cuatrimestre 2', 4);
+INSERT INTO `Cursos` (`nombre`, `carrera_id`) VALUES
+('Cuatrimestre 1', 1),
+('Cuatrimestre 2', 1),
+('Cuatrimestre 1', 2),
+('Cuatrimestre 2', 2),
+('Cuatrimestre 1', 3),
+('Cuatrimestre 2', 3);
 
-INSERT INTO `Grupos` (`id`, `nombre`, `curso_id`) VALUES
-(1, 'A', 1);
+INSERT INTO `Grupos` (`nombre`, `curso_id`) VALUES
+('A', 1),
+('B', 1);
 
-INSERT INTO `Alumnos` (`id`, `nombre`, `apellido_paterno`, `apellido_materno`, `grupo_id`) VALUES
-(1, 'Antonio', 'Cadena', 'Gonzalez', 1),
-(2, 'Julio', 'Gastelum ', 'Martinez', 1),
-(4, 'Erika', 'Montes ', 'De Oca', 1),
-(5, 'Mike', 'Briones ', 'Soto', 1),
-(6, 'Victor', 'Cordova ', 'Cordova', 1);
+INSERT INTO `Alumnos` (`nombre`, `apellido_paterno`, `apellido_materno`, `grupo_id`) VALUES
+('Antonio', 'Cadena', 'Gonzalez', 1),
+('Julio', 'Gastelum ', 'Martinez', 1),
+('Erika', 'Montes ', 'De Oca', 1),
+('Mike', 'Briones ', 'Soto', 1),
+('Victor', 'Cordova ', 'Cordova', 1);
 
-INSERT INTO `Materias` (`id`, `nombre`) VALUES
-(1, 'Programación'),
-(2, 'Desarrollo Web'),
-(3, 'Matematicas'),
-(4, 'Optativa'),
-(5, 'Ingles');
+INSERT INTO `Materias` (`nombre`) VALUES
+('Programación'),
+('Desarrollo Web'),
+('Matematicas'),
+('Optativa'),
+('Ingles');
 
-INSERT INTO `Profesor` (`id`, `nombre`, `grado`) VALUES
-(1, 'Torres Aldana Daniel', 'Lic.'),
-(2, 'Laura Trejo', 'M.C'),
-(3, 'Valencia Javier', 'Ing.');
+INSERT INTO `Profesor` (`nombre`, `grado`) VALUES
+('Torres Aldana Daniel', 'Lic.'),
+('Laura Trejo', 'M.C'),
+('Valencia Javier', 'Ing.');
 
-INSERT INTO `CursosMaterias` (`id`, `curso_id`, `materia_id`) VALUES
-(1, 1, 1);
+INSERT INTO `CursosMaterias` (`curso_id`, `materia_id`) VALUES
+(1, 1);
 
-INSERT INTO `GruposCursos` (`id`, `grupo_id`, `curso_id`) VALUES
-(1, 1, 1);
-INSERT INTO `MateriasProfesor` (`id`, `materia_id`, `profesor_id`) VALUES
-(1, 1, 1),
-(2, 5, 3),
-(3, 2, 2);
+INSERT INTO `GruposCursos` (`grupo_id`, `curso_id`) VALUES
+(1, 1);
+INSERT INTO `MateriasProfesor` (`materia_id`, `profesor_id`) VALUES
+(1, 1),
+(3, 3),
+(2, 2);
 
 DELIMITER $$
 --
@@ -136,9 +137,9 @@ grupo_id = agrupoid, id=aid
 WHERE id= aid;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar` (IN `id` INT, IN `name` VARCHAR(20), IN `lastname` VARCHAR(20), IN `lastname2` VARCHAR(20), IN `groupid` INT)  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar` (IN `name` VARCHAR(20), IN `lastname` VARCHAR(20), IN `lastname2` VARCHAR(20), IN `groupid` INT)  NO SQL
 BEGIN
-insert into Alumnos(id,nombre,apellido_paterno,apellido_materno,grupo_id) values(id,name,lastname,lastname2,groupid);
+insert into Alumnos(nombre,apellido_paterno,apellido_materno,grupo_id) values(name,lastname,lastname2,groupid);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `borrar` (IN `aid` INT)  NO SQL
@@ -146,14 +147,23 @@ BEGIN
 DELETE FROM Alumnos where id=aid;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `todosAlumnos` (IN `aid` INT)  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaAlumno` (IN `aid` INT)  NO SQL
 BEGIN
-select a.id,a.nombre, a.apellido_paterno,a.apellido_materno,gru.nombre as Grupo,cur.nombre as curso, car.nombre as carrera from Alumnos as a
+select a.id,a.nombre, a.apellido_paterno,a.apellido_materno,gru.nombre as grupo, gru.id as grupo_id, cur.id as curso_id, cur.nombre as curso, car.id as carrera_id, car.nombre as carrera from Alumnos as a
 join Grupos as gru on a.grupo_id = gru.id 
-join Gruposcursos on gru.id = GruposCursos.grupo_id
+join GruposCursos on gru.id = GruposCursos.grupo_id
 join Cursos as cur on GruposCursos.curso_id = cur.id
 join Carreras as car on cur.carrera_id = car.id 
 where a.id = aid;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `todosAlumnos` ()  NO SQL
+BEGIN
+select a.id,a.nombre, a.apellido_paterno,a.apellido_materno,gru.nombre as grupo, gru.id as grupo_id, cur.id as curso_id, cur.nombre as curso, car.id as carrera_id, car.nombre as carrera from Alumnos as a
+join Grupos as gru on a.grupo_id = gru.id 
+join GruposCursos on gru.id = GruposCursos.grupo_id
+join Cursos as cur on GruposCursos.curso_id = cur.id
+join Carreras as car on cur.carrera_id = car.id;
 END$$
 
 DELIMITER ;
