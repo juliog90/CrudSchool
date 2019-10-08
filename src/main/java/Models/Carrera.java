@@ -2,9 +2,9 @@ package Models;
 
 public class Carrera {
     private Integer id;
-    private Integer nombre;
+    private String nombre;
 
-    public Carrera(Integer id, Integer nombre) {
+    public Carrera(Integer id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
@@ -13,7 +13,7 @@ public class Carrera {
         return id;
     }
 
-    public Integer getNombre() {
+    public String getNombre() {
         return nombre;
     }
 }
