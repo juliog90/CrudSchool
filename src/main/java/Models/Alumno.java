@@ -82,6 +82,10 @@ public class Alumno {
     }
 
     // Getters
+    public Integer getId() {
+        return id;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -218,5 +222,10 @@ public class Alumno {
         }
         // Regresamos la lista
         return alumnos;
+    }
+
+    @Override
+    public String toString() {
+        return nombre + " " + apellidoPaterno + " " + apellidoMaterno;
     }
 }
