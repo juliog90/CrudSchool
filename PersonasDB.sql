@@ -100,10 +100,10 @@ INSERT INTO `Grupos` (`nombre`, `curso_id`) VALUES
 
 INSERT INTO `Alumnos` (`nombre`, `apellido_paterno`, `apellido_materno`, `grupo_id`) VALUES
 ('Antonio', 'Cadena', 'Gonzalez', 1),
-('Julio', 'Gastelum ', 'Martinez', 1),
-('Erika', 'Montes ', 'De Oca', 1),
-('Mike', 'Briones ', 'Soto', 1),
-('Victor', 'Cordova ', 'Cordova', 1);
+('Julio', 'Gastelum', 'Martinez', 1),
+('Erika', 'Montes', 'De Oca', 1),
+('Mike', 'Briones', 'Soto', 1),
+('Victor', 'Cordova', 'Cordova', 1);
 
 INSERT INTO `Materias` (`nombre`) VALUES
 ('Programación'),
