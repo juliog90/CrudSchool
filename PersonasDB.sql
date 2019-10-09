@@ -5,7 +5,7 @@ create database escuela;
 
 use escuela;
 
-
+-- Creacion de tablas
 create table `Carreras` (
     `id` int not null auto_increment,
     `nombre` varchar(40) not null,
@@ -79,6 +79,8 @@ create table `GruposCursos` (
     primary key(`id`)
 );
 
+-- Inserts de pruebas
+
 INSERT INTO `Carreras` (`nombre`) VALUES
 ('TICS'),
 ('Contabilidad'),
@@ -129,7 +131,8 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar` (IN `anombre` VARCHAR(20), IN `apaterno` VARCHAR(20), IN `amaterno` VARCHAR(20), IN `agrupoid` INT, IN `aid` INT)  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `actualizar` (IN `anombre` VARCHAR(20), IN `apaterno` VARCHAR(20),
+IN `amaterno` VARCHAR(20), IN `agrupoid` INT, IN `aid` INT)  NO SQL
 BEGIN
 update Alumnos 
 SET nombre = anombre , apellido_paterno = apaterno ,apellido_materno = amaterno,
@@ -137,7 +140,8 @@ grupo_id = agrupoid, id=aid
 WHERE id= aid;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar` (IN `name` VARCHAR(20), IN `lastname` VARCHAR(20), IN `lastname2` VARCHAR(20), IN `groupid` INT)  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar` (IN `name` VARCHAR(20), IN `lastname` VARCHAR(20),
+ IN `lastname2` VARCHAR(20), IN `groupid` INT)  NO SQL
 BEGIN
 insert into Alumnos(nombre,apellido_paterno,apellido_materno,grupo_id) values(name,lastname,lastname2,groupid);
 END$$
@@ -149,7 +153,8 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `consultaAlumno` (IN `aid` INT)  NO SQL
 BEGIN
-select a.id,a.nombre, a.apellido_paterno,a.apellido_materno,gru.nombre as grupo, gru.id as grupo_id, cur.id as curso_id, cur.nombre as curso, car.id as carrera_id, car.nombre as carrera from Alumnos as a
+select a.id,a.nombre, a.apellido_paterno,a.apellido_materno,gru.nombre as grupo, gru.id as grupo_id, cur.id as curso_id,
+ cur.nombre as curso, car.id as carrera_id, car.nombre as carrera from Alumnos as a
 join Grupos as gru on a.grupo_id = gru.id 
 join GruposCursos on gru.id = GruposCursos.grupo_id
 join Cursos as cur on GruposCursos.curso_id = cur.id
@@ -159,7 +164,8 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `todosAlumnos` ()  NO SQL
 BEGIN
-select a.id,a.nombre, a.apellido_paterno,a.apellido_materno,gru.nombre as grupo, gru.id as grupo_id, cur.id as curso_id, cur.nombre as curso, car.id as carrera_id, car.nombre as carrera from Alumnos as a
+select a.id,a.nombre, a.apellido_paterno,a.apellido_materno,gru.nombre as grupo, gru.id as grupo_id, cur.id as curso_id,
+ cur.nombre as curso, car.id as carrera_id, car.nombre as carrera from Alumnos as a
 join Grupos as gru on a.grupo_id = gru.id 
 join GruposCursos on gru.id = GruposCursos.grupo_id
 join Cursos as cur on GruposCursos.curso_id = cur.id
